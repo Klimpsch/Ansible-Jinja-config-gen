@@ -13,6 +13,8 @@ Automate the configuration of network devices using Ansible + Jinja templates.
 
 ## Installation
 ```bash
+git clone https://github.com/Klimpsch/Ansible-Jinja-config-gen
+cd Ansible-Jinja-config-gen
 python -m venv venv
 source venv/bin/activate      
 pip install -r requirements.txt
