@@ -1,0 +1,32 @@
+---
+device_type: switch
+
+vlans:
+  - { id: 10, name: USERS }
+  - { id: 99, name: MGMT }
+
+mgmt_svi:
+  vlan: 99
+  ipv4: 192.168.99.11
+  mask: 255.255.255.0
+  gateway: 192.168.99.1
+
+interfaces:
+  - name: GigabitEthernet0/0
+    description: Uplink trunk to SW2
+    mode: trunk
+    trunk_vlans: "10,99"
+  - name: GigabitEthernet0/1
+    description: Access port - user PC
+    mode: access
+    access_vlan: 10
+  - name: GigabitEthernet0/2
+    description: Access port - user PC
+    mode: access
+    access_vlan: 10
+
+snmp:
+  community: public
+  access: ro
+  location: TestLab
+  contact: admin@example.com

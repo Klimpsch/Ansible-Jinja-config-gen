@@ -1,0 +1,37 @@
+---
+# render.yml - the Ansible equivalent of render.py.
+#
+# Run it with:
+#     ansible-playbook render.yml
+#
+# For every host in the inventory, Ansible:
+#   1. auto-loads that host's variables from host_vars/<host>.yml
+#   2. feeds them (plus built-ins like inventory_hostname) to base.j2
+#   3. writes the result to configs/<host>.cfg
+#
+# hosts: all      -> run against every device in the inventory
+# connection: local + gather_facts: false -> we only write local files,
+#   not connecting to real gear, so skip SSH and fact-gathering.
+
+- name: Render device configs from host_vars + Jinja template
+  hosts: network
+  connection: local
+  gather_facts: false
+  vars:
+    # silence the "discovered interpreter" warning by naming it explicitly
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+  tasks:
+    - name: Make sure the output folder exists
+      ansible.builtin.file:
+        path: configs
+        state: directory
+        mode: "0755"
+      run_once: true          # only needs to happen one time, not per-host
+
+    - name: Generate configs/{{ inventory_hostname }}.cfg
+      ansible.builtin.template:
+        src: templates/base.j2
+        dest: "configs/{{ inventory_hostname }}.cfg"
+      # 'template' runs on the controller for each host, so each device
+      # gets its own rendered file using its own host_vars.

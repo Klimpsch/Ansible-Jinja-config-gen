@@ -1,0 +1,31 @@
+---
+# host_vars/R1.yml - Ansible auto-loads this for host "R1".
+# Every key here becomes a variable usable in the template.
+device_type: router
+
+interfaces:
+  - name: Loopback0
+    description: Management / router-id
+    ipv4: 10.0.0.1
+    mask: 255.255.255.255
+    ospf: { area: 0 }
+  - name: GigabitEthernet0/0
+    description: Link to R2
+    ipv4: 10.1.12.1
+    mask: 255.255.255.0
+    ospf: { area: 0 }
+  - name: GigabitEthernet0/1
+    description: LAN toward SW1
+    ipv4: 192.168.10.1
+    mask: 255.255.255.0
+    ospf: { area: 0 }
+
+ospf:
+  process: 1
+  router_id: 10.0.0.1
+
+snmp:
+  community: public
+  access: ro
+  location: TestLab
+  contact: admin@example.com
