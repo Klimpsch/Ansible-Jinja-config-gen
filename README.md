@@ -16,7 +16,8 @@ host_vars/<host>.yml  +  templates/base.j2
 
 ## Description
 
-Automate the configuration of network devices using Ansible + Jinja templates. 
+Automate the configuration of network devices using Ansible + Jinja templates.
+Tested using CML labs 2.10.
 
 
 ## Installation
@@ -49,4 +50,5 @@ Inventory is picked up automatically via `ansible.cfg`.
 | `push.yml` | the playbook that pushes config to each host
 | `ansible.cfg` | project settings (points at the inventory) 
 
-
+## Topology
+![Network topology](images/topology.png)
