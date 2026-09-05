@@ -1,32 +1,48 @@
 ---
 device_type: switch
 
-vlans:
-  - { id: 10, name: USERS }
-  - { id: 99, name: MGMT }
+loopback:
+  name: Loopback0
+  ip: 10.0.0.4
+  mask: 255.255.255.255
 
-mgmt_svi:
-  vlan: 99
-  ipv4: 192.168.99.11
-  mask: 255.255.255.0
-  gateway: 192.168.99.1
+vlans:
+  - id: 99
+    name: MGMT
 
 interfaces:
   - name: GigabitEthernet0/0
-    description: Uplink trunk to SW2
-    mode: trunk
-    trunk_vlans: "10,99"
+    mode: routed           # 'no switchport' + L3 address
+    ip: 10.1.1.13
+    mask: 255.255.255.252
+    ospf: { process: 1, area: 0 }
   - name: GigabitEthernet0/1
-    description: Access port - user PC
-    mode: access
-    access_vlan: 10
+    mode: unused_switchport # left as default switchport, no config
   - name: GigabitEthernet0/2
-    description: Access port - user PC
+    mode: unused_switchport
+  - name: GigabitEthernet0/3
     mode: access
-    access_vlan: 10
+    description: JUMPBOX
+    access_vlan: 99
+    portfast: true
+  - name: GigabitEthernet1/0
+    mode: unused_switchport
 
-snmp:
-  community: public
-  access: ro
-  location: TestLab
-  contact: admin@example.com
+svis:
+  - name: Vlan99
+    description: MGMT-SVI
+    ip: 192.168.99.1
+    mask: 255.255.255.0
+
+ospf:
+  process: 1
+  router_id: 10.0.0.4
+  passive_default: true
+  active_interfaces:
+    - GigabitEthernet0/0
+    - GigabitEthernet0/1
+    - GigabitEthernet0/2
+  networks:
+    - { address: 10.0.0.0,     wildcard: 0.0.0.255, area: 0 }
+    - { address: 10.1.1.0,     wildcard: 0.0.0.255, area: 0 }
+    - { address: 192.168.99.0, wildcard: 0.0.0.255, area: 0 }
