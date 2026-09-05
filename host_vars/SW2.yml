@@ -11,6 +11,11 @@ vlans:
     name: MGMT
 
 interfaces:
+  - name: GigabitEthernet0/1
+    mode: routed           # 'no switchport' + L3 address
+    ip: 10.1.1.26
+    mask: 255.255.255.252
+    ospf: { process: 1, area: 0 }
   - name: GigabitEthernet0/2
     mode: routed           # 'no switchport' + L3 address
     ip: 10.1.1.18
