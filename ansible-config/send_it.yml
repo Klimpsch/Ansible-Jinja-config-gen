@@ -1,9 +1,0 @@
----
-- name: Push rendered configs
-  hosts: network
-  gather_facts: false
-
-  tasks:
-    - name: Push configuration
-      cisco.ios.ios_config:
-        src: "../configs/{{ inventory_hostname }}.cfg"
