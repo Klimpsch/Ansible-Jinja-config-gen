@@ -17,7 +17,10 @@ interfaces:
     mask: 255.255.255.252
     ospf: { process: 1, area: 0 }
   - name: GigabitEthernet0/1
-    mode: unused_switchport # left as default switchport, no config
+    mode: routed           # 'no switchport' + L3 address
+    ip: 10.1.1.25
+    mask: 255.255.255.252
+    ospf: { process: 1, area: 0 }
   - name: GigabitEthernet0/2
     mode: unused_switchport
   - name: GigabitEthernet0/3
